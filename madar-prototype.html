@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدار — منصة ربط الشركات متناهية الصغر بالمستثمرين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --royal:#1e3a8a;
+  --sky:#2563eb;
+  --sky-soft:#eaf0ff;
+  --bg:#f8fafc;
+  --bg-alt:#f0f4ff;
+  --ink:#101a33;
+  --ink-mid:#4a5878;
+  --ink-soft:#7f8bab;
+  --line:#dfe6f5;
+  --good:#22c55e;
+  --bad:#ef4444;
+  --warn:#f59e0b;
+  --white:#fff;
+  --r-sm:8px;
+  --r-md:14px;
+  --r-lg:22px;
+  --shadow:0 1px 2px rgba(30,58,138,.06), 0 8px 24px -12px rgba(30,58,138,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;font-weight:600;line-height:1.35;letter-spacing:-.01em}
+p{margin:0}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:2.5px solid var(--sky);outline-offset:3px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* ---------- شريط التنقل ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:1240px;margin:0 auto;padding:0 24px;
+  height:68px;display:flex;align-items:center;gap:32px;
+}
+.brand{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.brand-name{font-size:23px;font-weight:600;letter-spacing:-.02em;color:var(--royal)}
+.brand-sub{font-size:11.5px;color:var(--ink-soft);border-right:1px solid var(--line);padding-right:11px;margin-right:2px;line-height:1.3;max-width:120px;font-weight:400}
+
+.tabs{display:flex;gap:4px;margin-inline-start:auto}
+.tab{
+  padding:8px 16px;border-radius:99px;font-size:14px;font-weight:500;
+  color:var(--ink-mid);white-space:nowrap;transition:background .15s,color .15s;
+}
+.tab:hover{background:var(--bg-alt)}
+.tab[aria-selected="true"]{background:var(--royal);color:#fff}
+.who{
+  display:flex;align-items:center;gap:9px;padding:5px 6px 5px 14px;
+  border:1px solid var(--line);border-radius:99px;background:#fff;font-size:13px;color:var(--ink-mid);
+}
+.who b{font-weight:500;color:var(--ink)}
+.avatar{width:29px;height:29px;border-radius:50%;background:var(--royal);color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:600}
+
+/* ---------- شريط الصلاحية ---------- */
+.roles{max-width:1240px;margin:0 auto;padding:18px 24px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.roles-lbl{font-size:12.5px;color:var(--ink-soft)}
+.role-btn{padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--ink-mid);font-size:13.5px;font-weight:500;transition:background .15s,color .15s,border-color .15s}
+.role-btn.on{background:var(--royal);border-color:var(--royal);color:#fff}
+.inv-banner{display:flex;align-items:center;gap:9px;margin-bottom:22px;padding:13px 16px;border:1px solid var(--line);border-inline-start:3px solid var(--good);border-radius:var(--r-md);background:#f0fdf4;font-size:13.5px;color:#166534;font-weight:500}
+.inv-cta{margin-top:20px;display:flex;justify-content:flex-start}
+
+/* ---------- تخطيط عام ---------- */
+.screen{display:none;max-width:1240px;margin:0 auto;padding:34px 24px 90px}
+.screen.on{display:block}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px;flex-wrap:wrap}
+.page-head h1{font-size:27px}
+.page-head p{color:var(--ink-mid);font-size:14px;margin-top:4px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+.pad{padding:24px 26px}
+.sec-title{font-size:16.5px;display:flex;align-items:center;gap:9px}
+.sec-note{font-size:12.5px;color:var(--ink-soft);font-weight:400}
+
+/* ---------- الشاشة ١: المدار ---------- */
+.orbit-wrap{
+  display:grid;grid-template-columns:300px 1fr;gap:0;
+  background:linear-gradient(120deg,#16307a 0%,#1e3a8a 45%,#2563eb 130%);
+  border-radius:var(--r-lg);color:#fff;overflow:hidden;
+  box-shadow:0 20px 50px -28px rgba(30,58,138,.6);
+}
+.orbit-col{padding:26px 24px 28px;text-align:center;border-inline-end:1px solid rgba(255,255,255,.14)}
+.orbit-eyebrow{font-size:12.5px;color:#b8caf6;margin-bottom:2px}
+.orbit-svg{width:230px;height:230px;margin:2px auto -6px;display:block}
+.orbit-track{fill:none;stroke:rgba(255,255,255,.16);stroke-width:9}
+.orbit-arc{fill:none;stroke:#7dd3fc;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)}
+.orbit-dotg{transition:transform 1.1s cubic-bezier(.4,0,.2,1)}
+.orbit-score{font-size:52px;font-weight:600;letter-spacing:-.03em}
+.orbit-of{font-size:15px;color:#b8caf6;font-weight:400}
+.orbit-state{font-size:13px;color:#dbe7ff}
+.orbit-side{padding:26px 28px;display:flex;flex-direction:column;gap:20px}
+.orbit-side h2{font-size:19px;font-weight:500}
+.orbit-side .lede{font-size:13.5px;color:#cddcfb;max-width:60ch}
+
+.trend{background:rgba(255,255,255,.09);border-radius:var(--r-md);padding:14px 16px 8px}
+.trend-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:#cddcfb;margin-bottom:6px}
+.trend svg{width:100%;height:74px;display:block;overflow:visible}
+.trend-x{display:flex;justify-content:space-between;font-size:11px;color:#a9bff0;margin-top:2px}
+
+.conf{background:rgba(255,255,255,.09);border-radius:var(--r-md);padding:14px 16px}
+.conf-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.conf-lbl{font-size:13px;color:#dbe7ff}
+.conf-val{font-size:19px;font-weight:600}
+.bar{height:7px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.bar span{display:block;height:100%;border-radius:99px;background:#7dd3fc;transition:width .9s cubic-bezier(.4,0,.2,1)}
+.conf-hint{font-size:11.5px;color:#a9bff0;margin-top:8px}
+.btn-ghost-w{
+  align-self:flex-start;padding:9px 16px;border-radius:99px;background:rgba(255,255,255,.14);
+  color:#fff;font-size:13.5px;font-weight:500;border:1px solid rgba(255,255,255,.28);transition:background .15s;
+}
+.btn-ghost-w:hover{background:rgba(255,255,255,.24)}
+
+/* ---------- التفسير المالي ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.signal-head{display:flex;align-items:center;gap:10px;padding:18px 22px 14px;border-bottom:1px solid var(--line)}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.signal-head h3{font-size:15.5px}
+.signal-head .cnt{margin-inline-start:auto;font-size:12.5px;color:var(--ink-soft)}
+.signal{padding:15px 22px;border-bottom:1px solid #eef2fb}
+.signal:last-child{border-bottom:none}
+.signal-row{display:flex;align-items:baseline;gap:10px}
+.signal-row b{font-size:14.5px;font-weight:500}
+.metric{margin-inline-start:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.signal p{font-size:13px;color:var(--ink-mid);margin-top:4px;max-width:52ch}
+.why{
+  font-size:12.5px;color:var(--sky);font-weight:500;margin-top:7px;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.why:hover{text-decoration:underline}
+.explain{
+  display:none;margin-top:10px;background:var(--bg-alt);border-radius:var(--r-sm);
+  padding:12px 14px;font-size:12.5px;color:var(--ink-mid);line-height:1.75;
+  border-inline-start:3px solid var(--sky);
+}
+.explain.on{display:block}
+.explain-t{color:var(--ink);font-weight:500;display:block;margin-bottom:3px}
+
+/* ---------- طلبات الوصول ---------- */
+table{width:100%;border-collapse:collapse}
+th{
+  text-align:right;font-size:12px;font-weight:500;color:var(--ink-soft);
+  padding:0 22px 10px;border-bottom:1px solid var(--line);
+}
+td{padding:15px 22px;border-bottom:1px solid #eef2fb;font-size:14px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.inv{display:flex;align-items:center;gap:11px}
+.inv-av{width:34px;height:34px;border-radius:9px;background:var(--sky-soft);color:var(--royal);display:grid;place-items:center;font-size:12.5px;font-weight:600;flex-shrink:0}
+.inv small{display:block;font-size:12px;color:var(--ink-soft);line-height:1.4}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:500}
+.chip-b{background:var(--sky-soft);color:var(--royal)}
+.chip-g{background:#e8f9ee;color:#15803d}
+.chip-r{background:#fdecec;color:#b91c1c}
+.chip-o{background:#fef4e2;color:#b45309}
+.acts{display:flex;gap:8px;justify-content:flex-start}
+.btn{padding:8px 15px;border-radius:var(--r-sm);font-size:13.5px;font-weight:500;transition:.15s;white-space:nowrap}
+.btn-p{background:var(--royal);color:#fff}
+.btn-p:hover{background:#16307a}
+.btn-s{background:#fff;color:var(--ink-mid);border:1px solid var(--line)}
+.btn-s:hover{border-color:var(--ink-soft);color:var(--ink)}
+.btn-d{background:#fff;color:#b91c1c;border:1px solid #f6cfcf}
+.btn-d:hover{background:#fdecec}
+.btn-lg{padding:11px 22px;font-size:14.5px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- الشاشة ٢: السوق ---------- */
+.notice{
+  display:flex;gap:11px;align-items:flex-start;background:var(--bg-alt);
+  border:1px solid #d9e2fb;border-radius:var(--r-md);padding:13px 16px;
+  font-size:13px;color:var(--ink-mid);margin-bottom:22px;
+}
+.notice b{color:var(--royal);font-weight:500}
+.filters{
+  display:flex;gap:22px;align-items:center;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:14px 20px;margin-bottom:22px;box-shadow:var(--shadow);
+}
+.fgroup{display:flex;align-items:center;gap:9px}
+.fgroup > span{font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{padding:6px 13px;border-radius:99px;font-size:13px;color:var(--ink-mid);background:var(--bg);border:1px solid var(--line);transition:.15s}
+.fchip:hover{border-color:var(--sky)}
+.fchip.on{background:var(--royal);color:#fff;border-color:var(--royal)}
+select{
+  font-family:inherit;font-size:13px;padding:7px 12px;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;
+}
+input[type=range]{accent-color:var(--sky);width:110px}
+.fcount{margin-inline-start:auto;font-size:12.5px;color:var(--ink-soft)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.co{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.co-top{padding:20px 22px 16px;display:flex;gap:14px;align-items:flex-start}
+.co-mark{width:44px;height:44px;border-radius:12px;background:var(--bg-alt);color:var(--royal);display:grid;place-items:center;font-size:17px;font-weight:600;flex-shrink:0}
+.co-name{font-size:17px;font-weight:600}
+.co-meta{font-size:12.5px;color:var(--ink-soft);margin-top:1px}
+.match{
+  margin-inline-start:auto;text-align:center;flex-shrink:0;
+  background:var(--sky-soft);border-radius:12px;padding:7px 12px;
+}
+.match b{display:block;font-size:19px;font-weight:600;color:var(--royal);line-height:1.2}
+.match span{font-size:10.5px;color:var(--sky);display:block;line-height:1.3}
+.co-pitch{padding:0 22px 16px;font-size:13px;color:var(--ink-mid);line-height:1.65}
+.metrics{padding:14px 22px;background:var(--bg);border-top:1px solid var(--line);display:grid;gap:13px}
+.m{display:grid;grid-template-columns:1fr auto;gap:3px 10px;align-items:baseline}
+.m-lbl{font-size:12.5px;color:var(--ink-mid)}
+.m-val{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.m-bar{grid-column:1/-1;height:5px;border-radius:99px;background:#e4ebfa;overflow:hidden}
+.m-bar span{display:block;height:100%;border-radius:99px}
+.co-flags{padding:14px 22px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--line)}
+.flag{font-size:11.5px;padding:3px 9px;border-radius:99px;background:#e8f9ee;color:#15803d;display:inline-flex;align-items:center;gap:4px}
+.co-foot{padding:0 22px 20px;margin-top:auto;display:flex;gap:9px;align-items:center}
+.co-foot .btn-p{flex:1;text-align:center}
+.locked{font-size:11.5px;color:var(--ink-soft);padding:0 22px 16px;display:flex;align-items:center;gap:6px}
+
+/* ---------- الشاشة ٣: غرفة الصفقة ---------- */
+.agr-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin-top:18px;padding:16px 18px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md)}
+.agr-sum .ds{text-align:start}
+.agr-sum .ds b{font-size:17px}
+.sig-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.sig{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg-alt);font-size:13px;color:var(--ink-mid);flex:1 1 200px}
+.sig b{font-weight:500;color:var(--ink)}
+.agr-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.fin-link{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+.step-tag{display:inline-block;margin-inline-end:9px;padding:3px 10px;border-radius:99px;background:var(--sky-soft);color:var(--royal);font-size:11.5px;font-weight:600}
+.step-lock{display:flex;align-items:center;gap:9px;margin-bottom:16px;padding:12px 15px;background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--r-md);font-size:12.5px;color:var(--ink-mid)}
+.locked-step .agr-btns .btn{opacity:.5;pointer-events:none}
+.dr-head{display:flex;align-items:center;gap:10px;width:100%;text-align:start;font-size:16.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.dr-head .caret{color:var(--ink-soft);font-size:13px;transition:transform .18s}
+.dr-head[aria-expanded="false"] .caret{transform:rotate(-90deg)}
+.esc-note{display:flex;align-items:flex-start;gap:10px;margin:0 26px 18px;padding:15px 17px;background:var(--sky-soft);border:1px solid var(--line);border-inline-start:3px solid var(--sky);border-radius:var(--r-md);font-size:13px;color:var(--ink-mid);line-height:1.8}
+.esc-note b{color:var(--royal);font-weight:600}
+.dr-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dr-tab{padding:9px 15px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--ink-mid);font-size:13.5px;font-weight:500;transition:background .15s,color .15s,border-color .15s}
+.dr-tab.on{background:var(--royal);border-color:var(--royal);color:#fff}
+.dr-panel{display:none;margin-top:16px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg);padding:18px}
+.dr-panel.on{display:block}
+.dr-panel h4{font-size:14.5px;margin-bottom:6px}
+.dr-panel p{font-size:13px;color:var(--ink-mid)}
+.dr-list{display:grid;gap:10px;margin-top:14px}
+.dr-item{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;font-size:13.5px}
+.dr-item span.k{font-size:12.5px;color:var(--ink-soft)}
+.dr-nda{display:flex;align-items:flex-start;gap:9px;margin-top:16px;padding:13px 15px;background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--r-md);font-size:12.5px;color:var(--ink-mid)}
+.deal-head{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--shadow);padding:22px 26px;margin-bottom:20px;
+}
+.parties{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.party{display:flex;align-items:center;gap:11px}
+.party .inv-av{width:38px;height:38px;font-size:13px}
+.party b{font-size:15px;font-weight:500;display:block}
+.party small{font-size:12px;color:var(--ink-soft)}
+.link-ico{color:var(--ink-soft);font-size:19px}
+.deal-sum{margin-inline-start:auto;display:flex;gap:26px;flex-wrap:wrap}
+.ds{text-align:left}
+.ds span{font-size:11.5px;color:var(--ink-soft);display:block}
+.ds b{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:26px 0 4px;position:relative}
+.stage{padding-top:30px;position:relative;text-align:center}
+.stage::before{
+  content:"";position:absolute;top:11px;right:0;left:0;height:3px;background:var(--line);
+}
+.stage:first-child::before{border-radius:0 99px 99px 0}
+.stage:last-child::before{border-radius:99px 0 0 99px}
+.stage.done::before,.stage.now::before{background:var(--sky)}
+.stage .knob{
+  position:absolute;top:0;right:50%;transform:translateX(50%);
+  width:25px;height:25px;border-radius:50%;background:#fff;border:3px solid var(--line);
+  display:grid;place-items:center;font-size:11.5px;font-weight:600;color:var(--ink-soft);
+  transition:.35s;
+}
+.stage.done .knob{background:var(--sky);border-color:var(--sky);color:#fff}
+.stage.now .knob{border-color:var(--sky);color:var(--sky);box-shadow:0 0 0 5px var(--sky-soft)}
+.stage b{font-size:13.5px;font-weight:500;display:block}
+.stage small{font-size:11.5px;color:var(--ink-soft)}
+.stage.done b,.stage.now b{color:var(--royal)}
+
+.ms-total{display:flex;align-items:center;gap:14px;padding:14px 22px;background:var(--bg-alt);border-top:1px solid var(--line);font-size:13px;color:var(--ink-mid)}
+.ms-total .bar{flex:1;background:#dbe4f8;height:8px}
+.ms-total .bar span{background:var(--royal)}
+.ms-name b{font-size:14.5px;font-weight:500;display:block}
+.ms-name small{color:var(--ink-soft);font-size:12px}
+.trigger{font-size:12.5px;color:var(--ink-mid)}
+.trigger b{font-weight:600;color:var(--ink)}
+
+.terms{display:grid;gap:10px;padding:20px 22px}
+.term{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:#fff}
+.term-h{
+  width:100%;display:flex;align-items:center;gap:12px;padding:14px 18px;text-align:right;
+  font-size:14.5px;font-weight:500;transition:background .15s;
+}
+.term-h:hover{background:var(--bg)}
+.term-h .badge{
+  margin-inline-start:auto;font-size:11.5px;padding:3px 9px;border-radius:99px;font-weight:500;
+}
+.term-h .caret{color:var(--ink-soft);transition:transform .2s;font-size:12px}
+.term.open .caret{transform:rotate(180deg)}
+.term-b{display:none;padding:0 18px 18px 48px;font-size:13px;color:var(--ink-mid);line-height:1.8}
+.term.open .term-b{display:block}
+.term-b ul{margin:8px 0 0;padding-inline-start:18px}
+.term-b li{margin-bottom:5px}
+.term-b .stress{background:#fef4e2;color:#92400e;border-radius:6px;padding:2px 7px;font-weight:500}
+
+.decide{
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  padding:20px 26px;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r-lg);box-shadow:var(--shadow);margin-top:20px;
+}
+.decide-note{font-size:12.5px;color:var(--ink-soft);margin-inline-end:auto;max-width:38ch}
+
+/* ---------- نوافذ ---------- */
+.veil{
+  position:fixed;inset:0;z-index:60;background:rgba(16,26,51,.55);
+  backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:24px;
+}
+.veil.on{display:flex}
+.modal{
+  background:#fff;border-radius:var(--r-lg);max-width:560px;width:100%;
+  max-height:88vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(16,26,51,.5);
+  animation:pop .22s cubic-bezier(.3,1.3,.6,1);
+}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.modal-h{padding:22px 26px 16px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}
+.modal-h h3{font-size:18px}
+.modal-h p{font-size:13px;color:var(--ink-mid);margin-top:3px}
+.x{margin-inline-start:auto;font-size:22px;color:var(--ink-soft);line-height:1;padding:2px 6px;border-radius:6px}
+.x:hover{background:var(--bg);color:var(--ink)}
+.modal-b{padding:22px 26px}
+.modal-f{padding:16px 26px 22px;display:flex;gap:10px;justify-content:flex-start;border-top:1px solid var(--line);flex-wrap:wrap}
+.opt{
+  display:flex;gap:12px;padding:14px 16px;border:1.5px solid var(--line);
+  border-radius:var(--r-md);cursor:pointer;margin-bottom:10px;transition:.15s;
+}
+.opt:hover{border-color:var(--sky)}
+.opt input{margin-top:5px;accent-color:var(--sky);flex-shrink:0}
+.opt b{font-size:14.5px;font-weight:500;display:block}
+.opt small{font-size:12.5px;color:var(--ink-mid);line-height:1.6;display:block}
+.opt.sel{border-color:var(--sky);background:var(--sky-soft)}
+.legal{
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:16px 18px;font-size:12.5px;color:var(--ink-mid);line-height:1.85;
+  max-height:210px;overflow:auto;
+}
+.legal h4{font-size:13.5px;color:var(--ink);margin-bottom:6px}
+.legal ol{padding-inline-start:18px;margin:8px 0 0}
+.legal li{margin-bottom:7px}
+.agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:13px;color:var(--ink-mid)}
+.agree input{margin-top:4px;accent-color:var(--sky)}
+.sign-line{
+  margin-top:14px;border:1px dashed var(--line);border-radius:var(--r-sm);
+  padding:12px 16px;font-size:13px;display:flex;justify-content:space-between;color:var(--ink-soft);
+}
+
+.toast-zone{position:fixed;bottom:26px;right:26px;z-index:80;display:flex;flex-direction:column;gap:10px}
+.toast{
+  background:var(--ink);color:#fff;padding:13px 18px;border-radius:12px;font-size:13.5px;
+  box-shadow:0 14px 34px -12px rgba(16,26,51,.6);display:flex;gap:10px;align-items:center;
+  animation:slide .25s ease;max-width:340px;
+}
+@keyframes slide{from{opacity:0;transform:translateX(-16px)}}
+.toast .tick{width:19px;height:19px;border-radius:50%;background:var(--good);display:grid;place-items:center;font-size:11px;flex-shrink:0}
+
+@media (max-width:980px){
+  .orbit-wrap{grid-template-columns:1fr}
+  .orbit-col{border-inline-end:none;border-bottom:1px solid rgba(255,255,255,.14)}
+  .grid2{grid-template-columns:1fr}
+  .brand-sub{display:none}
+}
+@media (max-width:760px){
+  .topbar-in{height:auto;padding:12px 16px;flex-wrap:wrap;gap:12px}
+  .tabs{margin-inline-start:0;width:100%;overflow-x:auto}
+  .who{margin-inline-start:auto}
+  .screen{padding:22px 16px 70px}
+  .pipe{grid-template-columns:1fr;gap:2px}
+  .stage{padding:8px 0 8px 0;text-align:right;padding-inline-start:36px}
+  .stage::before{right:11px;left:auto;top:0;bottom:0;width:3px;height:auto}
+  .stage .knob{right:0;transform:none;top:8px}
+  .deal-sum{margin-inline-start:0}
+  td,th{padding-inline:14px}
+  .tbl-scroll{overflow-x:auto}
+  table{min-width:620px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ شريط التنقل ============ -->
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="75" fill="none" stroke="#1d4ed8" stroke-width="6"/>
+        <circle cx="138" cy="100" r="20" fill="#2563eb"/>
+      </svg>
+      <span class="brand-name">مدار</span>
+      <span class="brand-sub">تمويل الشركات متناهية الصغر</span>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="شاشات المنصة">
+      <button class="tab" role="tab" aria-selected="false" data-go="s1">لوحة المنشأة</button>
+      <button class="tab" role="tab" aria-selected="true" data-go="s2">سوق الفرص</button>
+      <button class="tab" role="tab" aria-selected="false" data-go="s3">غرفة الصفقة</button>
+    </div>
+
+    <div class="who" id="who">
+      <span id="whoRole">مستثمر</span>
+      <b id="whoName">خالد المطيري</b>
+      <span class="avatar" id="whoAv">خ</span>
+    </div>
+  </div>
+</header>
+
+<div class="roles" id="roles" style="display:none">
+  <span class="roles-lbl">عرض الصلاحية</span>
+  <button class="role-btn on" data-role="inv">عرض المستثمر (بعد قبول التصريح)</button>
+  <button class="role-btn" data-role="own">عرض صاحب المنشأة (المؤسس)</button>
+</div>
+
+<!-- ============ الشاشة ١: لوحة المنشأة ============ -->
+<main class="screen" id="s1" role="tabpanel">
+  <div class="page-head">
+    <div>
+      <h1>مؤسسة رِفد للخدمات اللوجستية</h1>
+      <p>سجل تجاري 4030•••217 · منشأة متناهية الصغر · انضمت لمدار في مارس 2026</p>
+    </div>
+    <span class="chip chip-g">● البيانات محدَّثة قبل 6 ساعات</span>
+  </div>
+
+  <p class="inv-banner" id="invBanner"><span>✓</span><span>ملف مفتح للمستثمر بموجب تصريح الإفصاح المحكوم.</span></p>
+
+  <!-- الملف الاستثماري الحي -->
+  <section class="orbit-wrap">
+    <div class="orbit-col">
+      <p class="orbit-eyebrow">مؤشر الصحة الاستثمارية</p>
+      <svg class="orbit-svg" viewBox="0 0 240 240" role="img" aria-labelledby="orbitLbl">
+        <title id="orbitLbl">مؤشر الصحة الاستثمارية: <tspan id="a11yScore">92</tspan> من 100</title>
+        <g transform="rotate(-90 120 120)">
+          <circle class="orbit-track" cx="120" cy="120" r="96"/>
+          <circle class="orbit-arc" id="arc" cx="120" cy="120" r="96"
+                  stroke-dasharray="603" stroke-dashoffset="603"/>
+        </g>
+        <g class="orbit-dotg" id="dotg" transform="rotate(-90 120 120)">
+          <circle cx="216" cy="120" r="9" fill="#fff"/>
+          <circle cx="216" cy="120" r="4" fill="#1e3a8a"/>
+        </g>
+        <text x="120" y="128" text-anchor="middle" class="orbit-score num" fill="#fff" id="scoreTxt">92</text>
+        <text x="120" y="152" text-anchor="middle" class="orbit-of" fill="#b8caf6">من 100</text>
+      </svg>
+      <p class="orbit-state">نطاق «جاهز للعرض المشروط» — <span id="scoreDelta" style="color:#7dd3fc">+4 عن الشهر الماضي</span></p>
+    </div>
+
+    <div class="orbit-side">
+      <div>
+        <h2>الملف الاستثماري الحي</h2>
+        <p class="lede">يُحدَّث المؤشر تلقائيًا من فاتورتك الإلكترونية وحسابك البنكي وبيانات العملاء. لا يرى المستثمر هذه البيانات إلا بإذنك.</p>
+      </div>
+
+      <div class="trend">
+        <div class="trend-top">
+          <span>مسار الأداء المالي — 8 أشهر</span>
+          <span>هامش التشغيل ونمو العملاء (مؤشر مركّب)</span>
+        </div>
+        <svg viewBox="0 0 520 90" preserveAspectRatio="none" aria-label="منحنى صاعد لمسار الأداء المالي خلال ثمانية أشهر">
+          <defs>
+            <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7dd3fc" stop-opacity=".42"/>
+              <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M6,74 L80,66 L154,70 L228,52 L302,56 L376,34 L450,26 L514,14 L514,90 L6,90 Z" fill="url(#fade)"/>
+          <path d="M6,74 L80,66 L154,70 L228,52 L302,56 L376,34 L450,26 L514,14"
+                fill="none" stroke="#7dd3fc" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="514" cy="14" r="4.5" fill="#fff"/>
+        </svg>
+        <div class="trend-x"><span>فبراير</span><span>مايو</span><span>سبتمبر</span></div>
+      </div>
+
+      <div class="conf">
+        <div class="conf-top">
+          <span class="conf-lbl">درجة ثقة البيانات</span>
+          <span class="conf-val num" id="confTxt">82%</span>
+        </div>
+        <div class="bar"><span id="confBar" style="width:82%"></span></div>
+        <p class="conf-hint" id="confHint">مصدران موصولان من ثلاثة. ربط كشف الحساب البنكي يرفع الثقة ويقلّل تحفّظ المستثمر.</p>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px" id="ownerTools">
+        <button class="btn-ghost-w" id="linkBank">ربط كشف الحساب البنكي</button>
+        <button class="btn-ghost-w" id="refreshFin">تحديث الوضع المالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القوائم والتقارير المالية الرسمية -->
+  <section class="card" style="margin-top:20px" id="docsSection">
+    <div class="pad">
+      <h3 class="sec-title">القوائم والتقارير المالية الرسمية</h3>
+      <p class="sec-note" style="margin-top:3px">تُكمّل هذه المستندات الربط البنكي وترفع درجة ثقة بياناتك أمام المستثمر.</p>
+
+      <div class="fin-link"><span class="chip chip-g">الحساب البنكي: مرتبط ومُفرَز آلياً ✓</span><span class="sec-note">تُقرأ الحركة البنكية آليًا وتُصنَّف دون إدخال يدوي.</span></div>
+
+      <div class="dr-list" id="docsList">
+        <div class="dr-item">
+          <div><b>القوائم المالية الميسرة — الميزانية وقائمة الدخل</b><br><span class="k">تُثبت الملاءة المالية والأصول وتحدد عدم وجود ديون سابقة.</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-s" data-up="القوائم المالية الميسرة">رفع PDF</button><span class="chip chip-g">موثق ✓</span></div>
+        </div>
+        <div class="dr-item">
+          <div><b>جدول توزيع الملكية والحصص (Cap Table Summary)</b><br><span class="k">توزيع الحصص قبل الجولة وبعدها.</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-s" data-up="جدول توزيع الملكية والحصص">رفع PDF</button><span class="chip chip-g">موثق ✓</span></div>
+        </div>
+        <div class="dr-item">
+          <div><b>شهادة الزكاة والدخل / الشهادة الضريبية</b><br><span class="k">سارية وصادرة من الجهة المختصة.</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-s" data-up="شهادة الزكاة والدخل">رفع PDF</button><span class="chip chip-g">موثق ✓</span></div>
+        </div>
+        <div class="dr-item">
+          <div><b>السجل التجاري وعقد التأسيس الموثق</b><br><span class="k">نسخة موثّقة إلكترونيًا.</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-s" data-up="السجل التجاري وعقد التأسيس">رفع PDF</button><span class="chip chip-g">موثق ✓</span></div>
+        </div>
+      </div>
+
+      <p class="dr-nda" style="margin-top:18px"><span>🔒</span><span>تُحفظ القوائم والتقارير بشكل آمن وخاص، وتُنتقل تلقائياً لغرفة البيانات (Data Room) ليتطلع عليها المستثمر الملاك فور قبولك لطلب الإفصاح.</span></p>
+    </div>
+  </section>
+
+  <!-- التفسير المالي -->
+  <div class="grid2">
+    <section class="card">
+      <div class="signal-head">
+        <span class="dot" style="background:var(--good)"></span>
+        <h3>إشارات القوة</h3>
+        <span class="cnt">4 إشارات</span>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>نمو قاعدة العملاء</b><span class="metric" style="color:var(--good)">+18%</span></div>
+        <p>عدد العملاء المتكرّرين ارتفع من 39 إلى 46 عميلًا خلال ثلاثة أشهر.</p>
+        <button class="why" data-why="w1">لماذا يهم المستثمر؟</button>
+        <div class="explain" id="w1">
+          <span class="explain-t">قراءة مدار</span>
+          النمو جاء من عملاء متكرّرين لا من حملة تسويق لمرة واحدة، ما يعني أن الطلب حقيقي وقابل للتكرار. في الشركات ما قبل الإيراد الثابت، تكرار العميل أقوى دليلًا على الجدوى من حجم المبيعات نفسه.
+        </div>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>كفاءة حرق السيولة</b><span class="metric" style="color:var(--good)">1.6×</span></div>
+        <p>كل ريال مصروف تشغيليًا يولّد 1.6 ريال قيمة محقّقة من العقود المنفَّذة.</p>
+        <button class="why" data-why="w2">لماذا يهم المستثمر؟</button>
+        <div class="explain" id="w2">
+          <span class="explain-t">قراءة مدار</span>
+          المعيار المقبول في هذا القطاع 1.2×. تجاوزك له يعني أن التمويل الإضافي سيُترجم توسّعًا لا تغطية خسائر — وهذا أهم سؤال يطرحه المستثمر الملائكي.
+        </div>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>انتظام تحديث البيانات</b><span class="metric" style="color:var(--good)">7/7 أسابيع</span></div>
+        <p>لم يتأخر أي تحديث أسبوعي عن موعده منذ الانضمام.</p>
+        <button class="why" data-why="w3">لماذا يهم المستثمر؟</button>
+        <div class="explain" id="w3">
+          <span class="explain-t">قراءة مدار</span>
+          الانتظام إشارة على انضباط إداري. المستثمر يقرأ التأخر في التحديث كإخفاء محتمل، ويقرأ الانتظام كاستعداد للحوكمة بعد الاستثمار.
+        </div>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>تنوّع مصادر الدخل</b><span class="metric" style="color:var(--good)">لا عميل يفوق 22%</span></div>
+        <p>أعلى عميل يشكّل 22% من حجم الأعمال، مقابل 41% قبل ستة أشهر.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="signal-head">
+        <span class="dot" style="background:var(--bad)"></span>
+        <h3>مخاطر تحتاج معالجة</h3>
+        <span class="cnt">3 إشارات</span>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>أيام التحصيل</b><span class="metric" style="color:var(--bad)">51 يومًا</span></div>
+        <p>ارتفعت من 34 يومًا. متوسط القطاع 38 يومًا.</p>
+        <button class="why" data-why="r1">ما الأثر وكيف أعالجه؟</button>
+        <div class="explain" id="r1" style="border-color:var(--bad)">
+          <span class="explain-t">قراءة مدار</span>
+          الأثر: نقدك محتجز عند العملاء 17 يومًا زائدة، فتضطر لتمويل تشغيلك من رأس المال بدل الإيراد المحصَّل — وهذا يخفض مؤشرك 6 نقاط.
+          <br>المعالجة المقترحة: خصم 2% للسداد خلال 10 أيام، وتحويل أكبر ثلاثة عملاء إلى دفعة مقدّمة 30%.
+        </div>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>مدرج السيولة</b><span class="metric" style="color:var(--warn)">5.2 أشهر</span></div>
+        <p>بمعدل المصروف الحالي، السيولة تكفي حتى فبراير 2027.</p>
+        <button class="why" data-why="r2">ما الأثر وكيف أعالجه؟</button>
+        <div class="explain" id="r2" style="border-color:var(--warn)">
+          <span class="explain-t">قراءة مدار</span>
+          المستثمر يفضّل مدرجًا لا يقل عن 6 أشهر عند التفاوض، لأن المدرج القصير يضعف موقفك في الشروط. توقيت جولتك الآن مناسب: تتفاوض من موقع قوة قبل أن يقصر المدرج.
+        </div>
+      </div>
+
+      <div class="signal">
+        <div class="signal-row"><b>اكتمال الإفصاح</b><span class="metric" style="color:var(--warn)">مصدران من 3</span></div>
+        <p>كشف الحساب البنكي غير موصول — يخفض ثقة البيانات 12 نقطة.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- طلبات الوصول -->
+  <section class="card" style="margin-top:20px" id="permSection">
+    <div class="pad" style="padding-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <h3 class="sec-title">طلبات الوصول للبيانات المالية</h3>
+        <p class="sec-note" style="margin-top:3px">أنت تحدّدين من يرى، وماذا يرى، ولمدة كم. كل إفصاح مسجَّل ويمكن سحبه.</p>
+      </div>
+      <span class="chip chip-o" style="margin-inline-start:auto">طلبان بانتظار قرارك</span>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>المستثمر</th><th>نوع الجهة</th><th>مستوى البيانات المطلوب</th><th>الحالة</th><th>القرار</th>
+          </tr>
+        </thead>
+        <tbody id="reqBody">
+          <tr data-req="1">
+            <td><div class="inv"><span class="inv-av">خ.م</span><div><b>خالد المطيري</b><small>مستثمر ملائكي · 9 استثمارات سابقة</small></div></div></td>
+            <td><span class="chip chip-b">فرد مرخَّص</span></td>
+            <td class="lvl">النِسب المالية الكاملة + مسار 12 شهرًا</td>
+            <td class="st"><span class="chip chip-o">بانتظار قرارك</span></td>
+            <td>
+              <div class="acts">
+                <button class="btn btn-p" data-accept="1">قبول الإفصاح</button>
+                <button class="btn btn-d" data-reject="1">رفض</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-req="2">
+            <td><div class="inv"><span class="inv-av">و.ن</span><div><b>صندوق واحة النمو</b><small>صندوق جريء · مرحلة البذرة</small></div></div></td>
+            <td><span class="chip chip-b">صندوق مرخَّص</span></td>
+            <td class="lvl">النِسب المالية فقط (بدون تفاصيل العملاء)</td>
+            <td class="st"><span class="chip chip-o">بانتظار قرارك</span></td>
+            <td>
+              <div class="acts">
+                <button class="btn btn-p" data-accept="2">قبول الإفصاح</button>
+                <button class="btn btn-d" data-reject="2">رفض</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-req="3">
+            <td><div class="inv"><span class="inv-av">ر.ق</span><div><b>ريان القحطاني</b><small>مستثمر ملائكي · لم يوقّع اتفاقية عدم إفصاح</small></div></div></td>
+            <td><span class="chip chip-b">فرد مرخَّص</span></td>
+            <td class="lvl">النِسب المالية الكاملة</td>
+            <td class="st"><span class="chip chip-r">مرفوض — لم يوقّع NDA</span></td>
+            <td><div class="acts"><button class="btn btn-s" disabled>أُغلق الطلب</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="inv-cta" id="invCta">
+    <button class="btn btn-lg btn-p" data-go="s3">الانتقال لغرفة الصفقة وإبرام العقد</button>
+  </div>
+</main>
+
+<!-- ============ الشاشة ٢: سوق الفرص ============ -->
+<main class="screen on" id="s2" role="tabpanel">
+  <div class="page-head">
+    <div>
+      <h1>سوق الفرص</h1>
+      <p>فرص مطابقة لأطروحتك الاستثمارية: قطاعات عملية، مرحلة ما قبل الإيراد، تذكرة 200–800 ألف ريال</p>
+    </div>
+    <span class="chip chip-b">مطابقة محدَّثة اليوم 8:40 ص</span>
+  </div>
+
+  <div class="notice">
+    <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#2563eb" stroke-width="1.7" style="margin-top:4px;flex-shrink:0"><circle cx="10" cy="10" r="8"/><path d="M10 9v5M10 6.2v.1"/></svg>
+    <p><b>لا تعرض مدار أرقام إيرادات.</b> هذه الشركات متناهية الصغر أو ما قبل الإيراد، والرقم المطلق مضلّل في هذه المرحلة. نعرض بدلًا منه نِسب الجاهزية والسيولة وكفاءة الحرق ودرجة ثقة البيانات — وهي ما يتوقّع فعلًا نجاة الشركة.</p>
+  </div>
+
+  <div class="filters">
+    <div class="fgroup">
+      <span>القطاع</span>
+      <div class="fchips" id="sectors">
+        <button class="fchip on" data-sec="all">الكل</button>
+        <button class="fchip" data-sec="logi">لوجستيات</button>
+        <button class="fchip" data-sec="food">أغذية</button>
+        <button class="fchip" data-sec="edu">تعليم</button>
+        <button class="fchip" data-sec="energy">طاقة</button>
+        <button class="fchip" data-sec="retail">تجزئة</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span>مستوى السيولة</span>
+      <select id="liq">
+        <option value="0">أي مستوى</option>
+        <option value="1.5" title="يُظهر فقط الشركات التي تملك سيولة عالية جداً وفائضاً كبيراً، بحيث تغطي سيولتها النقدية ديونها القريبة بـ 150% أو أكثر (مخاطرة مالية منخفضة جداً للمستثمر).">نسبة سريعة 1.5× وأعلى</option>
+        <option value="1" title="يُظهر فقط الشركات التي تملك سيولة نقدية تغطي ديونها القريبة بنسبة 100% أو أكثر (أي أن وضعها المالي متزن وآمن ولا تعاني من أزمة سيولة وشيكة).">نسبة سريعة 1.0× وأعلى</option>
+      </select>
+    </div>
+    <div class="fgroup">
+      <span>ثقة البيانات</span>
+      <input type="range" id="conf" min="50" max="95" value="50" step="5">
+      <b class="num" id="confOut" style="font-size:13px;width:38px">50%+</b>
+    </div>
+    <span class="fcount" id="fcount">6 فرص</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+</main>
+
+<!-- ============ الشاشة ٣: غرفة الصفقة ============ -->
+<main class="screen" id="s3" role="tabpanel">
+  <div class="page-head">
+    <div>
+      <h1>غرفة الصفقة</h1>
+      <p>مساحة مشتركة بين المنشأة والمستثمر — كل خطوة موثّقة ومرئية للطرفين</p>
+    </div>
+    <span class="chip chip-g">● الطرفان متصلان الآن</span>
+  </div>
+
+  <div class="deal-head">
+    <div class="parties">
+      <div class="party">
+        <span class="inv-av">رِ</span>
+        <div><b>مؤسسة رِفد</b><small>المنشأة · سارة العُتيبي</small></div>
+      </div>
+      <span class="link-ico">⇄</span>
+      <div class="party">
+        <span class="inv-av">خ.م</span>
+        <div><b>خالد المطيري</b><small>المستثمر · ملائكي</small></div>
+      </div>
+      <div class="deal-sum">
+        <div class="ds"><span>قيمة التمويل المطلوب</span><b>750,000 <small style="font-size:12px;font-weight:400">ريال</small></b></div>
+        <div class="ds"><span>مقابل حصة</span><b>12%</b></div>
+        <div class="ds"><span>عدد الدفعات</span><b>4</b></div>
+      </div>
+    </div>
+
+    <div class="pipe" id="pipe">
+      <div class="stage done"><span class="knob">✓</span><b>توقيع اتفاقية عدم الإفصاح</b><small>4 سبتمبر</small></div>
+      <div class="stage now"><span class="knob">2</span><b>مراجعة الملف الحي</b><small>جارية الآن</small></div>
+      <div class="stage"><span class="knob">3</span><b>الاتفاق على الشروط</b><small>بانتظار العرض</small></div>
+      <div class="stage"><span class="knob">4</span><b>إغلاق التمويل</b><small>—</small></div>
+    </div>
+  </div>
+
+  <!-- الخطوة ١) غرفة البيانات والعناية الواجبة -->
+  <section class="card" style="margin-top:20px" id="drCard">
+    <div class="pad">
+      <button class="dr-head" id="drToggle" aria-expanded="true">
+        <span class="caret">▾</span>
+        <span><span class="step-tag">الخطوة 1</span>مستندات الفحص والـ Data Room</span>
+        <span class="chip chip-b" style="margin-inline-start:auto">3 مستندات</span>
+      </button>
+      <p class="sec-note" style="margin-top:12px">وثائق الفحص النافي للجهالة المبسّط، متاحة للمستثمر الملاك بعد توقيع اتفاقية عدم الإفصاح.</p>
+      <div id="drBody">
+
+      <div class="dr-tabs" id="drTabs" role="tablist" aria-label="وثائق غرفة البيانات">
+        <button class="dr-tab on" role="tab" aria-selected="true" data-dr="d1">السجل التجاري وعقد التأسيس (PDF موثق)</button>
+        <button class="dr-tab" role="tab" aria-selected="false" data-dr="d2">جدول الملكية وتوزيع الحصص</button>
+        <button class="dr-tab" role="tab" aria-selected="false" data-dr="d3">التحليل المالي والتقارير المربوطة حياً</button>
+      </div>
+
+      <div class="dr-panel on" id="d1" role="tabpanel">
+        <h4>السجل التجاري وعقد التأسيس <span class="chip chip-b">رقمي موثق</span></h4>
+        <p>مستخرج من السجل التجاري وعقد تأسيس موثّق إلكترونيًا، مع تحقّق آلي من سلامة الوثيقة وتاريخ صلاحيتها.</p>
+        <div class="dr-list">
+          <div class="dr-item"><div><b>السجل التجاري</b><br><span class="k">PDF موثق · رقم 1010XXXXXX · سارٍ حتى 12/2027</span></div><span class="chip chip-g">موثّق</span></div>
+          <div class="dr-item"><div><b>عقد التأسيس</b><br><span class="k">PDF موثق إلكترونيًا · آخر تعديل 2025</span></div><span class="chip chip-g">موثّق</span></div>
+          <div class="dr-item"><div><b>الترخيص البلدي والتزامات الاشتراكات</b><br><span class="k">لا مخالفات قائمة</span></div><span class="chip chip-g">مطابق</span></div>
+        </div>
+      </div>
+
+      <div class="dr-panel" id="d2" role="tabpanel">
+        <h4>جدول الملكية والحصص (Cap Table Summary)</h4>
+        <p>توزيع الحصص قبل الاستثمار وبعده، بما يشمل أثر التخفيض على حصة المؤسِّس.</p>
+        <div class="tbl-scroll" style="margin-top:14px">
+          <table>
+            <thead><tr><th>المالك</th><th>الحصة قبل</th><th>الحصة بعد</th><th>الصفة</th></tr></thead>
+            <tbody>
+              <tr><td><b>سارة العُتيبي</b></td><td class="num">88%</td><td class="num">77.4%</td><td class="trigger">مؤسِّسة وإدارة تشغيلية</td></tr>
+              <tr><td><b>شريك مؤسِّس</b></td><td class="num">12%</td><td class="num">10.6%</td><td class="trigger">شريك غير تنفيذي</td></tr>
+              <tr><td><b>خالد المطيري</b></td><td class="num">—</td><td class="num">12%</td><td class="trigger">مستثمر ملائكي — هذه الجولة</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dr-panel" id="d3" role="tabpanel">
+        <h4>ملف التحليل المالي والتقارير المربوطة حياً</h4>
+        <p>قراءة مباشرة من الملف الحي للمنشأة، محدَّثة من الفاتورة الإلكترونية والحساب البنكي.</p>
+        <div class="dr-list">
+          <div class="dr-item"><div><b>مؤشر الصحة الاستثمارية</b><br><span class="k">محدَّث اليوم</span></div><b class="num">92/100</b></div>
+          <div class="dr-item"><div><b>كفاءة حرق السيولة</b><br><span class="k">النسبة السريعة</span></div><b class="num">1.8×</b></div>
+          <div class="dr-item"><div><b>أيام التحصيل</b><br><span class="k">متوسط آخر 90 يومًا</span></div><b class="num">41 يومًا</b></div>
+          <div class="dr-item"><div><b>ثقة واكتمال البيانات</b><br><span class="k">مصادر موصولة</span></div><b class="num">94%</b></div>
+        </div>
+      </div>
+
+      <p class="dr-nda"><span>🔒</span><span>جميع الملفات محمية ومتاحة للمستثمر المصرح له بموجب NDA.</span></p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px">
+        <button class="btn btn-lg btn-p" id="btnDD">الموافقة على نتائج الفحص النافي للجهالة واعتماد المستندات ✓</button>
+        <span class="sec-note">خطوة إلزامية قبل فتح العقد الاستثماري.</span>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- الخطوة ٢) العقد الاستثماري الموثق -->
+  <section class="card locked-step" id="agrCard" style="margin-top:20px">
+    <div class="pad">
+      <p class="step-lock" id="agrLock"><span>🔒</span><span>تُفتح هذه الخطوة بعد اعتماد مستندات الفحص النافي للجهالة.</span></p>
+      <h3 class="sec-title"><span class="step-tag">الخطوة 2</span>عقد الاستثمار وورقة الشروط الموحدة (Investment Agreement)</h3>
+      <p class="sec-note" style="margin-top:3px">صيغة موحّدة للاستثمار الملائكي وفق الأنظمة السعودية، تُوقَّع رقميًا من الطرفين وتُحفظ في سجل الصفقة.</p>
+
+      <div class="agr-sum">
+        <div class="ds"><span>المستثمر</span><b style="font-size:17px">خالد المطيري</b></div>
+        <div class="ds"><span>الشركة</span><b style="font-size:17px">مؤسسة رِفد</b></div>
+        <div class="ds"><span>تقييم الشركة</span><b class="num">6,250,000 <small style="font-size:12px;font-weight:400">ر.س</small></b></div>
+        <div class="ds"><span>مبلغ التمويل</span><b class="num">750,000 <small style="font-size:12px;font-weight:400">ر.س</small></b></div>
+        <div class="ds"><span>مقابل حصة</span><b class="num">12%</b></div>
+      </div>
+
+      <div class="legal" style="margin-top:16px">
+        <h4>معاينة نص العقد الموثق</h4>
+        <ol>
+          <li>يخضع هذا العقد لأنظمة المملكة العربية السعودية ولائحة الشركات، ويُحرَّر بصيغته النهائية عبر منصة التوثيق الإلكتروني.</li>
+          <li>يستثمر المستثمر مبلغ 750,000 ريال مقابل حصة 12% من رأس مال المنشأة، تُقيَّد في السجل التجاري بعد إتمام التحويل الأول.</li>
+          <li>يُصرف مبلغ الاستثمار على أربع دفعات مرتبطة بمحطات إنجاز مُثبتة من الملف المالي الحي.</li>
+          <li>تسري بنود الحوكمة وحماية الطرفين والشرط الجزائي المرفقة بالعقد كجزء لا يتجزأ منه.</li>
+          <li>حق المعلومات محصور بمؤشرات المحطات والتقرير الربعي، وتبقى بيانات العملاء داخل نطاق المنشأة.</li>
+          <li>تُسوّى الخلافات ودّيًا، ثم بالتحكيم التجاري وفق نظام التحكيم السعودي، ثم القضاء المختص.</li>
+        </ol>
+      </div>
+
+      <div class="sig-row">
+        <div class="sig"><b>توقيع المؤسس</b><span class="chip chip-g" style="margin-inline-start:auto">تم ✓</span></div>
+        <div class="sig"><b>توقيع المستثمر</b><span class="chip chip-o" id="sigInv" style="margin-inline-start:auto">بانتظار التوقيع ⏳</span></div>
+      </div>
+
+      <div class="agr-btns">
+        <button class="btn btn-lg btn-p" id="btnSign">معاينة وتوقيع العقد رقمياً عبر النفاذ</button>
+        <button class="btn btn-lg btn-s" id="btnPdf">تحميل العقد PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ٣) الدفعات -->
+  <section class="card" style="margin-top:20px">
+    <div class="pad" style="padding-bottom:18px">
+      <h3 class="sec-title"><span class="step-tag">الخطوة 3</span>آلية تسليم الدفعات والحساب الاستثماري المحمي</h3>
+      <p class="sec-note" style="margin-top:3px">تُودع الأموال في حساب استثماري محمي (Escrow Account)، وتُحول الدفعات آلياً لحساب الشركة البنكي فور تحقق المؤشر المالي تلقائياً عبر الربط المباشر.</p>
+      <p class="sec-note" style="margin-top:8px">ترتبط هذه الدفعات آليًا ببنود الحوكمة والشرط الجزائي المعتمد في العقد الموحّد أعلاه؛ أي إخلال بمحطة يُفعِّل البند المقابل له في العقد نفسه.</p>
+    </div>
+    <p class="esc-note"><span>🛡</span><span><b>تنويه الحوكمة المالية:</b> يُحفظ مبلغ التمويل كاملاً في حساب استثماري محمي (Escrow Vault)، وتُفرَج الدفعات وتُحول آلياً لحساب الشركة البنكي فور تحقق مؤشر الإنجاز المالي المحدد دون حاجة لتدخل يدوي.</span></p>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th>الدفعة</th><th>المبلغ</th><th>النسبة</th><th>محطة الإطلاق</th><th>مؤشر التحقّق</th><th>الحالة</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-name"><b>الدفعة الأولى</b><small>عند التوقيع</small></td>
+            <td class="num" style="font-weight:600">300,000</td>
+            <td class="num" style="font-weight:600">40%</td>
+            <td class="trigger">إتمام التوقيع وفتح الحساب المحمي</td>
+            <td class="trigger"><b>—</b></td>
+            <td id="p1st"><span class="chip chip-o">جاهزة للصرف عند التوقيع</span></td>
+          </tr>
+          <tr>
+            <td class="ms-name"><b>الدفعة الثانية</b><small>الشهر الثالث</small></td>
+            <td class="num" style="font-weight:600">187,500</td>
+            <td class="num" style="font-weight:600">25%</td>
+            <td class="trigger">التشغيل في ثلاث مدن</td>
+            <td class="trigger">عقود موقّعة ≥ <b>3 مدن</b></td>
+            <td><span class="chip chip-b">معلّقة بالإنجاز</span></td>
+          </tr>
+          <tr>
+            <td class="ms-name"><b>الدفعة الثالثة</b><small>الشهر السادس</small></td>
+            <td class="num" style="font-weight:600">150,000</td>
+            <td class="num" style="font-weight:600">20%</td>
+            <td class="trigger">تحسين كفاءة حرق السيولة</td>
+            <td class="trigger">كفاءة الحرق ≥ <b>1.8×</b></td>
+            <td><span class="chip chip-b">معلّقة بالإنجاز</span></td>
+          </tr>
+          <tr>
+            <td class="ms-name"><b>الدفعة الرابعة</b><small>الشهر التاسع</small></td>
+            <td class="num" style="font-weight:600">112,500</td>
+            <td class="num" style="font-weight:600">15%</td>
+            <td class="trigger">خفض أيام التحصيل</td>
+            <td class="trigger">أيام التحصيل ≤ <b>38 يومًا</b></td>
+            <td><span class="chip chip-b">معلّقة بالإنجاز</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dr-nda" style="margin:0 26px 18px"><span>⚠</span><span>بند الشرط الجزائي رقم (4) في العقد يتيح تجميد الدفعات المعلقة ومنح مهلة معالجة 30 يومًا عند عدم تحقيق المؤشر.</span></p>
+    <div class="ms-total">
+      <span>المحوَّل فعليًا</span>
+      <div class="bar"><span id="fundBar" style="width:0%"></span></div>
+      <b class="num" id="fundTxt" style="font-weight:600;color:var(--royal)">0 من 750,000 ريال</b>
+    </div>
+  </section>
+
+  <div class="decide">
+    <p class="decide-note">كل قرار هنا يُسجَّل في سجل الصفقة بختم زمني ويظهر للطرفين في اللحظة نفسها.</p>
+    <button class="btn btn-lg btn-p" id="btnConfirm" disabled>توقيع العقد وإيداع الدفعة الأولى</button>
+    <button class="btn btn-lg btn-s" id="btnDocs">استعراض وثائق الـ Data Room</button>
+    <button class="btn btn-lg btn-s" id="btnAsk">تجميد/إرسال استفسار</button>
+  </div>
+</main>
+
+<!-- ============ النوافذ ============ -->
+<div class="veil" id="veil">
+  <div class="modal" role="dialog" aria-modal="true" id="modal"></div>
+</div>
+<div class="toast-zone" id="toasts"></div>
+
+<script>
+/* ---------------- أدوات ---------------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const fmt = n => n.toLocaleString('en-US');
+
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = '<span class="tick">✓</span><span>'+msg+'</span>';
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-14px)'; t.style.transition='.3s'; }, 3400);
+  setTimeout(()=> t.remove(), 3750);
+}
+function openModal(html){
+  $('#modal').innerHTML = html;
+  $('#veil').classList.add('on');
+  const f = $('#modal').querySelector('button,input,select');
+  if(f) f.focus();
+}
+function closeModal(){ $('#veil').classList.remove('on'); }
+$('#veil').addEventListener('click', e => { if(e.target.id === 'veil') closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+document.addEventListener('click', e => { if(e.target.closest('.x, [data-close]')) closeModal(); });
+
+/* ---------------- الصلاحيات ---------------- */
+const WHO = {
+  s1:{r:'مستثمر', n:'خالد المطيري', a:'خ'},
+  s2:{r:'مستثمر', n:'خالد المطيري', a:'خ'},
+  s3:{r:'عرض مشترك', n:'رِفد ⇄ خالد', a:'⇄'}
+};
+let role = 'inv';
+function setRole(r){
+  role = r;
+  const inv = r === 'inv';
+  $$('#roles .role-btn').forEach(b => b.classList.toggle('on', b.dataset.role === r));
+  $('#invBanner').style.display = inv ? 'flex' : 'none';
+  $('#invCta').style.display = inv ? 'flex' : 'none';
+  $('#ownerTools').style.display = inv ? 'none' : 'flex';
+  $('#permSection').style.display = inv ? 'none' : 'block';
+  $('#docsSection').style.display = inv ? 'none' : 'block';
+  WHO.s1 = inv ? {r:'مستثمر', n:'خالد المطيري', a:'خ'} : {r:'مؤسِّسة', n:'سارة العُتيبي', a:'س'};
+  if($('#s1').classList.contains('on')){
+    $('#whoRole').textContent = WHO.s1.r;
+    $('#whoName').textContent = WHO.s1.n;
+    $('#whoAv').textContent = WHO.s1.a;
+  }
+}
+$('#roles').addEventListener('click', e => {
+  const b = e.target.closest('.role-btn'); if(!b) return;
+  setRole(b.dataset.role);
+});
+setRole('inv');
+
+$('#invCta button').addEventListener('click', () => $$('.tab')[2].click());
+
+/* ---------------- التنقل ---------------- */
+$$('.tab').forEach(t => t.addEventListener('click', () => {
+  $$('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+  const id = t.dataset.go;
+  $$('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+  $('#roles').style.display = id === 's1' ? 'flex' : 'none';
+  $('#whoRole').textContent = WHO[id].r;
+  $('#whoName').textContent = WHO[id].n;
+  $('#whoAv').textContent = WHO[id].a;
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
+
+/* ---------------- الشاشة ١: المدار ---------------- */
+const C = 2 * Math.PI * 96;
+let score = 92, conf = 82;
+function paintOrbit(){
+  $('#arc').setAttribute('stroke-dasharray', C);
+  $('#arc').setAttribute('stroke-dashoffset', C * (1 - score/100));
+  $('#dotg').setAttribute('transform', 'rotate(' + (-90 + 3.6*score) + ' 120 120)');
+  $('#scoreTxt').textContent = score;
+  $('#a11yScore').textContent = score;
+}
+setTimeout(paintOrbit, 220);
+
+$$('.why').forEach(b => b.addEventListener('click', () => {
+  const box = $('#' + b.dataset.why);
+  const open = box.classList.toggle('on');
+  b.textContent = open ? 'إخفاء التفسير' : (b.dataset.why[0] === 'w' ? 'لماذا يهم المستثمر؟' : 'ما الأثر وكيف أعالجه؟');
+}));
+
+$('#linkBank').addEventListener('click', () => {
+  openModal(`
+    <div class="modal-h">
+      <div><h3>ربط كشف الحساب البنكي</h3>
+      <p>قراءة فقط عبر واجهة الخدمات المصرفية المفتوحة. لا يمكن لمدار ولا للمستثمر تحريك أي مبلغ.</p></div>
+      <button class="x" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-b">
+      <label class="opt sel"><input type="radio" name="bnk" checked>
+        <span><b>نِسب مجمّعة فقط</b><small>يُحوَّل الكشف إلى نِسب (سيولة، تحصيل، حرق) ولا تُخزَّن الحركات التفصيلية.</small></span></label>
+      <label class="opt"><input type="radio" name="bnk">
+        <span><b>نِسب + تصنيف المصروفات</b><small>يضيف تحليل بنود المصروف. يرفع دقة التفسير ويظل مخفيًا عن المستثمر.</small></span></label>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">الأثر المتوقع: ثقة البيانات 82% ← 94% · المؤشر 92 ← 95</p>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-lg btn-p" id="doLink">تأكيد الربط</button>
+      <button class="btn btn-lg btn-s" data-close>إلغاء</button>
+    </div>`);
+  $$('#modal .opt').forEach(o => o.addEventListener('click', () => {
+    $$('#modal .opt').forEach(x => x.classList.remove('sel')); o.classList.add('sel');
+  }));
+  $('#doLink').addEventListener('click', () => {
+    closeModal();
+    conf = Math.max(conf, 94); score = 95;
+    $('#confBar').style.width = conf + '%';
+    $('#confTxt').textContent = conf + '%';
+    $('#confHint').textContent = 'ثلاثة مصادر موصولة من ثلاثة. ملفك الآن مكتمل الإفصاح على مستوى النِسب.';
+    $('#scoreDelta').textContent = '+3 عن الشهر الماضي';
+    $('#linkBank').textContent = '✓ ثلاثة مصادر موصولة';
+    $('#linkBank').disabled = true;
+    paintOrbit();
+    toast('تم الربط. ارتفع المؤشر إلى 95 وثقة البيانات إلى ' + conf + '%');
+  });
+});
+
+$('#refreshFin').addEventListener('click', () => {
+  const b = $('#refreshFin');
+  b.disabled = true;
+  b.textContent = 'جارٍ التحديث…';
+  setTimeout(() => {
+    b.disabled = false;
+    b.textContent = 'تحديث الوضع المالي';
+    toast('تم تحديث الوضع المالي من المصادر الموصولة');
+  }, 1100);
+});
+
+/* رفع القوائم والتقارير */
+$('#docsList').addEventListener('click', e => {
+  const b = e.target.closest('[data-up]'); if(!b) return;
+  conf = 95;
+  $('#confBar').style.width = conf + '%';
+  $('#confTxt').textContent = conf + '%';
+  $('#confHint').textContent = 'القوائم والتقارير المالية مرفوعة وموثّقة مع الربط البنكي.';
+  toast('رُفعت ' + b.dataset.up + '. ارتفعت درجة ثقة البيانات إلى 95%');
+});
+
+/* طلبات الوصول */
+$('#reqBody').addEventListener('click', e => {
+  const acc = e.target.closest('[data-accept]');
+  const rej = e.target.closest('[data-reject]');
+  if(acc) askDisclosure(acc.dataset.accept);
+  if(rej){
+    const row = $('tr[data-req="'+rej.dataset.reject+'"]');
+    row.querySelector('.st').innerHTML = '<span class="chip chip-r">مرفوض بقرارك</span>';
+    row.querySelector('.acts').innerHTML = '<button class="btn btn-s" disabled>أُغلق الطلب</button>';
+    pending();
+    toast('رُفض الطلب. لن يرى المستثمر أي بيانات مالية.');
+  }
+});
+function pending(){
+  const n = $$('#reqBody .chip-o').length;
+  const c = $('#s1 .chip-o');
+  if(c && c.closest('.pad')) c.textContent = n ? n + ' طلب بانتظار قرارك' : 'لا طلبات معلّقة';
+}
+function askDisclosure(id){
+  const name = $('tr[data-req="'+id+'"] .inv b').textContent;
+  openModal(`
+    <div class="modal-h">
+      <div><h3>مستوى الإفصاح لـ ${name}</h3>
+      <p>اختاري ما يراه، والمدة. يمكنك سحب الوصول في أي وقت من سجل الإفصاح.</p></div>
+      <button class="x" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-b">
+      <label class="opt sel"><input type="radio" name="lv" value="نِسب مالية فقط · 30 يومًا" checked>
+        <span><b>النِسب المالية فقط</b><small>السيولة، أيام التحصيل، كفاءة الحرق، مؤشر الصحة. بدون أسماء عملاء ولا عقود ولا أرقام إيراد.</small></span></label>
+      <label class="opt"><input type="radio" name="lv" value="نِسب + مسار 12 شهرًا · 30 يومًا">
+        <span><b>النِسب + مسار 12 شهرًا</b><small>يضيف الاتجاه الزمني للمؤشرات. مناسب للمستثمر الذي بدأ الفحص النافي للجهالة.</small></span></label>
+      <label class="opt"><input type="radio" name="lv" value="إفصاح موسّع مؤقّت · 14 يومًا">
+        <span><b>إفصاح موسّع مؤقّت — 14 يومًا</b><small>يضيف تركّز العملاء دون أسمائهم، وينتهي تلقائيًا بعد 14 يومًا.</small></span></label>
+      <div class="sign-line"><span>يُسجَّل الإفصاح باسمك وبختم زمني</span><span>سارة العُتيبي · 9 سبتمبر 2026</span></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-lg btn-p" id="doDisc">تأكيد الإفصاح</button>
+      <button class="btn btn-lg btn-s" data-close>إلغاء</button>
+    </div>`);
+  $$('#modal .opt').forEach(o => o.addEventListener('click', () => {
+    $$('#modal .opt').forEach(x => x.classList.remove('sel')); o.classList.add('sel');
+    o.querySelector('input').checked = true;
+  }));
+  $('#doDisc').addEventListener('click', () => {
+    const lvl = $('#modal input[name=lv]:checked').value;
+    closeModal();
+    const row = $('tr[data-req="'+id+'"]');
+    row.querySelector('.lvl').textContent = lvl;
+    row.querySelector('.st').innerHTML = '<span class="chip chip-g">إفصاح نشط</span>';
+    row.querySelector('.acts').innerHTML = '<button class="btn btn-d" data-reject="'+id+'">سحب الوصول</button>';
+    pending();
+    toast('فُتح الإفصاح: ' + lvl);
+  });
+}
+
+/* ---------------- الشاشة ٢: سوق الفرص ---------------- */
+const COS = [
+  {n:'رِفد', i:'رِ', sec:'logi', secAr:'خدمات لوجستية', stage:'ما قبل الإيراد · تشغيل تجريبي',
+   pitch:'شبكة توصيل الميل الأخير للمتاجر الصغيرة في المدن المتوسطة، بأسطول بالشراكة لا بالتملّك.',
+   match:92, ready:74, quick:1.8, conf:94,
+   flags:['نمو عملاء +18%','تحديث منتظم 7 أسابيع','لا عميل يفوق 22%']},
+  {n:'وَقود', i:'وَ', sec:'energy', secAr:'صيانة وطاقة', stage:'التحقق من الفكرة',
+   pitch:'صيانة تنبؤية لمولّدات المنشآت الصغيرة عبر حسّاس منخفض التكلفة واشتراك شهري.',
+   match:90, ready:71, quick:2.1, conf:86,
+   flags:['كفاءة حرق 1.9×','خمس منشآت في التجربة']},
+  {n:'نبتة', i:'نب', sec:'food', secAr:'أغذية وزراعة حضرية', stage:'بذرة مبكرة',
+   pitch:'زراعة أوراق سلطة داخل المدن وتوريدها للمطاعم المستقلة خلال ست ساعات من الحصاد.',
+   match:87, ready:69, quick:1.6, conf:88,
+   flags:['هدر أقل 34% من المستورد','عقود توريد 11 مطعمًا']},
+  {n:'صِلة', i:'صِ', sec:'edu', secAr:'تقنية تعليم', stage:'ما قبل الإيراد',
+   pitch:'منصة تربط طلاب الثانوية بمرشدين مهنيين من قطاعات محلية، بنموذج اشتراك مدرسي.',
+   match:84, ready:66, quick:1.3, conf:79,
+   flags:['ثلاث مدارس في الاختبار','فريق مؤسِّس مكتمل']},
+  {n:'مِسك', i:'مِ', sec:'retail', secAr:'تجزئة وعناية شخصية', stage:'التحقق من الفكرة',
+   pitch:'علامة عناية بالبشرة بمكوّنات محلية، تُصنَّع بالتعاقد وتُوزَّع عبر المتاجر المتخصصة.',
+   match:79, ready:61, quick:2.4, conf:72,
+   flags:['هامش أولي مرتفع','مخزون خفيف']},
+  {n:'مَداد', i:'مَ', sec:'retail', secAr:'خدمات إبداعية', stage:'بذرة',
+   pitch:'استوديو محتوى بالاشتراك للمنشآت الصغيرة، بفريق مصغّر وشبكة مستقلّين مدرَّبة.',
+   match:76, ready:58, quick:0.9, conf:68,
+   flags:['تكلفة استقطاب منخفضة']}
+];
+const state = {sec:'all', liq:0, conf:50, access:{}};
+
+function metric(lbl, val, pct, color){
+  return `<div class="m"><span class="m-lbl">${lbl}</span><span class="m-val" style="color:${color}">${val}</span>
+    <span class="m-bar"><span style="width:${pct}%;background:${color}"></span></span></div>`;
+}
+function renderCards(){
+  const list = COS.filter(c =>
+    (state.sec === 'all' || c.sec === state.sec) &&
+    c.quick >= state.liq && c.conf >= state.conf);
+  $('#fcount').textContent = list.length ? list.length + ' فرصة مطابقة' : 'لا نتائج';
+  if(!list.length){
+    $('#cards').innerHTML = `<div class="card pad" style="grid-column:1/-1;text-align:center">
+      <h3 style="font-size:16px">لا فرصة تطابق هذه الفلاتر</h3>
+      <p style="font-size:13.5px;color:var(--ink-mid);margin-top:6px">وسّع نطاق ثقة البيانات أو أزل قيد السيولة لترى فرصًا في مراحل أبكر.</p>
+      <button class="btn btn-lg btn-s" style="margin-top:14px" id="reset">إعادة الفلاتر</button></div>`;
+    $('#reset').addEventListener('click', () => {
+      state.sec='all'; state.liq=0; state.conf=50;
+      $('#liq').value='0'; $('#conf').value=50; $('#confOut').textContent='50%+';
+      $$('.fchip').forEach(x => x.classList.toggle('on', x.dataset.sec === 'all'));
+      renderCards();
+    });
+    return;
+  }
+  $('#cards').innerHTML = list.map(c => {
+    const readyColor = c.ready >= 70 ? 'var(--good)' : c.ready >= 62 ? 'var(--warn)' : 'var(--bad)';
+    const quickColor = c.quick >= 1.5 ? 'var(--good)' : c.quick >= 1 ? 'var(--warn)' : 'var(--bad)';
+    const confColor = c.conf >= 85 ? 'var(--good)' : c.conf >= 75 ? 'var(--warn)' : 'var(--bad)';
+    const granted = state.access[c.n];
+    return `<article class="co">
+      <div class="co-top">
+        <span class="co-mark">${c.i}</span>
+        <div><div class="co-name">${c.n}</div><div class="co-meta">${c.secAr} · ${c.stage}</div></div>
+        <div class="match"><b class="num">${c.match}%</b><span>توافق مع أطروحتك</span></div>
+      </div>
+      <p class="co-pitch">${c.pitch}</p>
+      <div class="metrics">
+        ${metric('جاهزية ما قبل الإيراد', c.ready + '/100', c.ready, readyColor)}
+        ${metric('النسبة السريعة', c.quick.toFixed(1) + '×', Math.min(c.quick/3*100,100), quickColor)}
+        ${metric('ثقة واكتمال البيانات', c.conf + '%', c.conf, confColor)}
+      </div>
+      <div class="co-flags">${c.flags.map(f => '<span class="flag">✓ ' + f + '</span>').join('')}</div>
+      ${granted ? '' : '<p class="locked">🔒 النِسب التفصيلية ومسار 12 شهرًا يظهران بعد موافقة المنشأة</p>'}
+      <div class="co-foot">
+        ${granted
+          ? '<button class="btn btn-p" style="flex:1" data-room="'+c.n+'">فتح غرفة الصفقة</button>'
+          : '<button class="btn btn-p" data-nda="'+c.n+'">طلب الوصول الكامل</button><button class="btn btn-s" data-note="'+c.n+'">حفظ للمتابعة</button>'}
+      </div>
+    </article>`;
+  }).join('');
+}
+$('#sectors').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if(!b) return;
+  $$('.fchip').forEach(x => x.classList.toggle('on', x === b));
+  state.sec = b.dataset.sec; renderCards();
+});
+$('#liq').addEventListener('change', e => { state.liq = +e.target.value; renderCards(); });
+$('#conf').addEventListener('input', e => {
+  state.conf = +e.target.value; $('#confOut').textContent = state.conf + '%+'; renderCards();
+});
+$('#cards').addEventListener('click', e => {
+  const nda = e.target.closest('[data-nda]');
+  const note = e.target.closest('[data-note]');
+  const room = e.target.closest('[data-room]');
+  if(note){ toast('حُفظت ' + note.dataset.note + ' في قائمة المتابعة'); return; }
+  if(room){ $$('.tab')[2].click(); return; }
+  if(nda) showNDA(nda.dataset.nda);
+});
+function showNDA(name){
+  openModal(`
+    <div class="modal-h">
+      <div><h3>اتفاقية عدم إفصاح — ${name}</h3>
+      <p>توقيع إلكتروني واحد يفتح طلب الوصول ويُرسل إلى مؤسِّس المنشأة لاعتماده.</p></div>
+      <button class="x" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="legal">
+        <h4>بنود أساسية</h4>
+        <ol>
+          <li>سرّية المعلومات: يتعامل المستثمر مع كل ما يُفصح عنه في الملف الحي كمعلومة سرّية لمدة ثلاث سنوات من تاريخ الوصول.</li>
+          <li>حصر الغرض: تُستخدم البيانات لتقييم فرصة الاستثمار في ${name} فحسب، ولا يجوز استخدامها في نشاط منافس أو نقلها لطرف ثالث.</li>
+          <li>عدم الاستقطاب: لا يجوز استقطاب فريق المنشأة أو عملائها لمدة اثني عشر شهرًا.</li>
+          <li>حدود الإفصاح: يبقى مستوى البيانات المعروض بيد المنشأة، ولها سحب الوصول في أي وقت دون إبداء سبب.</li>
+          <li>الجزاء: يستوجب الإخلال تعويضًا اتفاقيًا لا يقل عن 100,000 ريال، مع إيقاف حساب المستثمر في مدار.</li>
+        </ol>
+      </div>
+      <label class="agree"><input type="checkbox" id="ok">
+        <span>قرأت البنود وأوافق عليها بصفتي مستثمرًا مرخَّصًا، وأتحمّل مسؤولية استخدام البيانات وفق الغرض المحصور أعلاه.</span></label>
+      <div class="sign-line"><span>خالد المطيري · مستثمر ملائكي</span><span>9 سبتمبر 2026</span></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-lg btn-p" id="sign" disabled>التوقيع وإرسال الطلب</button>
+      <button class="btn btn-lg btn-s" data-close>إلغاء</button>
+    </div>`);
+  $('#ok').addEventListener('change', e => $('#sign').disabled = !e.target.checked);
+  $('#sign').addEventListener('click', () => {
+    closeModal();
+    state.access[name] = true;
+    renderCards();
+    toast('وُقّعت الاتفاقية وأُرسل الطلب إلى ' + name + ' — القرار عند المنشأة');
+  });
+}
+renderCards();
+
+/* ---------------- الشاشة ٣: غرفة الصفقة ---------------- */
+let signed = false;
+
+/* تبويبات غرفة البيانات */
+$('#drTabs').addEventListener('click', e => {
+  const b = e.target.closest('.dr-tab'); if(!b) return;
+  $$('#drTabs .dr-tab').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+  b.classList.add('on'); b.setAttribute('aria-selected','true');
+  $$('.dr-panel').forEach(p => p.classList.toggle('on', p.id === b.dataset.dr));
+});
+
+$('#btnDD').addEventListener('click', () => {
+  $('#agrCard').classList.remove('locked-step');
+  $('#agrLock').style.display = 'none';
+  $('#btnConfirm').disabled = false;
+  $('#btnDD').textContent = '✓ اعتُمدت مستندات الفحص';
+  $('#btnDD').disabled = true;
+  const y = $('#agrCard').getBoundingClientRect().top + window.scrollY - 90;
+  window.scrollTo({top:y, behavior:'smooth'});
+  toast('اعتُمدت نتائج الفحص النافي للجهالة. فُتحت مرحلة العقد الاستثماري');
+});
+
+$('#drToggle').addEventListener('click', () => {
+  const open = $('#drToggle').getAttribute('aria-expanded') === 'true';
+  $('#drToggle').setAttribute('aria-expanded', String(!open));
+  $('#drBody').style.display = open ? 'none' : 'block';
+});
+
+$('#btnDocs').addEventListener('click', () => {
+  $('#drToggle').setAttribute('aria-expanded', 'true');
+  $('#drBody').style.display = 'block';
+  const y = $('#drCard').getBoundingClientRect().top + window.scrollY - 90;
+  window.scrollTo({top:y, behavior:'smooth'});
+});
+
+$('#btnPdf').addEventListener('click', () => toast('جارٍ تحضير نسخة PDF من العقد الموحّد'));
+
+function signContract(){
+  openModal(`
+    <div class="modal-h">
+      <div><h3>معاينة وتوقيع العقد رقمياً عبر النفاذ</h3><p>توقيع رقمي موثّق عبر النفاذ الوطني الموحّد، يُقيَّد في سجل الصفقة بختم زمني.</p></div>
+      <button class="x" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="legal" style="max-height:170px">
+        <h4>ما ستوقّع عليه</h4>
+        <ol>
+          <li>750,000 ريال مقابل حصة 12% على أربع دفعات مرتبطة بمحطات إنجاز.</li>
+          <li>الشرط الجزائي 5% من الدفعة المعلّقة عند تكرار الإخلال دون إفصاح مسبق.</li>
+          <li>مسار معالجة التعثّر المالي التدريجي دون إسقاط الدفعات.</li>
+          <li>حق المعلومات محصور بمؤشرات المحطات والتقرير الربعي، وحماية حصة المؤسِّس.</li>
+          <li>إيداع الدفعة الأولى 300,000 ريال (40%) في الحساب الاستثماري المحمي فور اكتمال التوقيع.</li>
+        </ol>
+      </div>
+      <label class="agree"><input type="checkbox" id="okSign"><span>أقرّ باطلاعي على نص العقد وأوقّعه رقمياً نيابة عن الطرف الذي أمثّله.</span></label>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-lg btn-p" id="doSign" disabled>توقيع العقد وإيداع الدفعة الأولى</button>
+      <button class="btn btn-lg btn-s" data-close>لاحقًا</button>
+    </div>`);
+  $('#okSign').addEventListener('change', e => $('#doSign').disabled = !e.target.checked);
+  $('#doSign').addEventListener('click', () => {
+    closeModal(); signed = true;
+    $('#sigInv').className = 'chip chip-g';
+    $('#sigInv').style.marginInlineStart = 'auto';
+    $('#sigInv').textContent = 'تم ✓';
+    ['#btnSign', '#btnConfirm'].forEach(id => {
+      $(id).textContent = '✓ العقد موقّع من الطرفين';
+      $(id).disabled = true;
+    });
+    $('#p1st').innerHTML = '<span class="chip chip-g">✓ محوَّلة</span>';
+    $('#fundBar').style.width = '40%';
+    $('#fundTxt').textContent = fmt(300000) + ' من ' + fmt(750000) + ' ريال';
+    const st = $$('#pipe .stage');
+    st[1].className = 'stage done'; st[1].querySelector('.knob').textContent = '✓';
+    st[1].querySelector('small').textContent = 'اكتملت اليوم';
+    st[2].className = 'stage done'; st[2].querySelector('.knob').textContent = '✓';
+    st[2].querySelector('small').textContent = 'وُقّع العقد';
+    st[3].className = 'stage now'; st[3].querySelector('small').textContent = 'الدفعة الأولى محوَّلة';
+    toast('وُقّع العقد وأُودعت الدفعة الأولى 300,000 ريال في الحساب المحمي');
+  });
+}
+
+$('#btnSign').addEventListener('click', signContract);
+$('#btnConfirm').addEventListener('click', signContract);
+
+$('#btnAsk').addEventListener('click', () => {
+  openModal(`
+    <div class="modal-h">
+      <div><h3>تجميد أو إرسال استفسار</h3><p>يصل الطلب للطرف الآخر ويُرفق بالبند المعني في سجل الصفقة.</p></div>
+      <button class="x" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-b">
+      <label class="opt sel"><input type="radio" name="q" checked>
+        <span><b>طلب تجميد الدفعات المعلّقة</b><small>يُفعّل بند الشرط الجزائي رقم (4): تجميد مؤقّت ومهلة معالجة 30 يومًا.</small></span></label>
+      <label class="opt"><input type="radio" name="q">
+        <span><b>استفسار عن الشرط الجزائي ومهلة التصحيح</b><small>طلب توضيح لأثر تأخّر محطة إنجاز مُفصَح عنه مسبقًا.</small></span></label>
+      <label class="opt"><input type="radio" name="q">
+        <span><b>استفسار عن جدول الملكية وأثر التخفيض</b><small>طلب تفصيل لحصة المؤسِّس بعد الجولة.</small></span></label>
+      <label class="opt"><input type="radio" name="q">
+        <span><b>استفسار عن وثائق العناية الواجبة</b><small>طلب وثيقة إضافية داخل نطاق الاتفاقية.</small></span></label>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-lg btn-p" id="doAsk">إرسال الطلب</button>
+      <button class="btn btn-lg btn-s" data-close>إلغاء</button>
+    </div>`);
+  $$('#modal .opt').forEach(o => o.addEventListener('click', () => {
+    $$('#modal .opt').forEach(x => x.classList.remove('sel')); o.classList.add('sel');
+    o.querySelector('input').checked = true;
+  }));
+  $('#doAsk').addEventListener('click', () => {
+    closeModal();
+    toast('أُرسل الطلب وسُجّل في سجل الصفقة');
+  });
+});
+</script>
+</body>
+</html>
